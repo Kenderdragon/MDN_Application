@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = false;
         
         userTextInput.value = typingArea.value;
-        timeTakenInput.value = Math.round((Date.now() - startTime) / 1000);
+        timeTakenInput.value = Math.round(Date.now() - startTime).toFixed(3) / 1000;
     }
 
     // Typing Listener to Start Timer
