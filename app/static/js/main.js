@@ -46,6 +46,18 @@ document.addEventListener('DOMContentLoaded', () => {
     historyModal.classList.remove('show');
   });
 
+  const clearButton = document.getElementById('clear-btn');
+  clearButton.addEventListener('click', async () => {
+      try {
+          if (confirm('Are you sure you want to clear all history?')) {
+              const historyManager = new HistoryManager('run-history');
+              await historyManager.clearHistory();
+              alert('History has been cleared.');
+          }
+      } catch (error) {
+          console.error('Error clearing history:', error);
+      }
+  });
 
   typingTest.finishTest = (message) => {
     const stats = originalFinishTest(message);

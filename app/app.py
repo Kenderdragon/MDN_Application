@@ -5,7 +5,7 @@ import json
 app = Flask(__name__)
 
 SAMPLE_TEXTS = [
-    "Im Going to Skin Liang"
+    "The quick brown fox jumps over the lazy dog"
 ]
 
 @app.route('/')
