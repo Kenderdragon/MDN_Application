@@ -12,6 +12,9 @@ function getRequiredElement(id) {
 
 document.addEventListener('DOMContentLoaded', () => {
     // Thank you tim dwyer for your Asteroids.ts code I have excecelnty  refactored.
+    const closeBtn = document.querySelector('.close-btn');
+    const historyModal = document.getElementById('history-modal');
+
   const elements = {
     timer: getRequiredElement('timer'),
     typingBox: getRequiredElement('typing-area'),
@@ -30,8 +33,20 @@ document.addEventListener('DOMContentLoaded', () => {
   historyManager.loadHistory();
   historyManager.initializeEventListeners();
 
+  if (!closeBtn || !historyModal) {
+    console.error('Could not find close button or modal in the DOM.');
+    return;
+  }
+
   // Override finishTest to save run data
   const originalFinishTest = typingTest.finishTest.bind(typingTest);
+
+  // Weird fucked up method I have to use or else it all breaks fuck my fucked up life.
+  closeBtn.addEventListener('click', () => {
+    historyModal.classList.remove('show');
+  });
+
+
   typingTest.finishTest = (message) => {
     const stats = originalFinishTest(message);
     if (stats) {
