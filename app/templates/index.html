@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Typing Analyzer</h1>
+    <p id="reference-text">{{ text }}</p>
+    <textarea id="typing-area"></textarea>
+    <div>
+        <p id="timer">Time Left: 60s</p>
+        <form id="typing-form" method="POST" action="/results">
+            <input type="hidden" name="user_text" id="user-text">
+            <input type="hidden" name="time_taken" id="time-taken">
+            <button type="submit" id="submit-btn" disabled>Submit</button>
+        </form>
+    </div>
+</body>
+</html>
