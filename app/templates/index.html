@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Analyzer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Typing Analyzer</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
 <body>
     <h1>Typing Analyzer</h1>
+    
+    <div class="mode-selector">
+        <label>
+            <input type="radio" name="mode" value="lazy" checked> Lazy Mode
+        </label>
+        <label>
+            <input type="radio" name="mode" value="perfect"> Perfect Mode
+        </label>
+    </div>
+
     <p id="reference-text">{{ text }}</p>
     <textarea id="typing-area"></textarea>
-    <div>
+    
+    <div class="stats">
         <p id="timer">Time Left: 60s</p>
-        <form id="typing-form" method="POST" action="/results">
-            <input type="hidden" name="user_text" id="user-text">
-            <input type="hidden" name="time_taken" id="time-taken">
-            <button type="submit" id="submit-btn" disabled>Submit</button>
-        </form>
+        <p id="accuracy">Accuracy: 100%</p>
+        <p id="wpm">WPM: 0</p>
     </div>
+
+    <button id="restart-btn" style="display: none;">Try Again</button>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

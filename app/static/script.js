@@ -1,59 +1,135 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const timer = document.getElementById('timer');
-    const typingArea = document.getElementById('typing-area');
-    const submitBtn = document.getElementById('submit-btn');
-    const userTextInput = document.getElementById('user-text');
-    const timeTakenInput = document.getElementById('time-taken');
-    const referenceText = document.getElementById('reference-text').textContent;
-    
-    // Should be changed to be made variable, hardcoded for now.
-    let timeLeft = 60;
-    let timerInterval = null;
-    let startTime = null;
+    // Get all our UI elements
+    const elements = {
+        timer: document.getElementById('timer'),
+        typingBox: document.getElementById('typing-area'),
+        targetText: document.getElementById('reference-text').textContent,
+        accuracyCounter: document.getElementById('accuracy'),
+        speedCounter: document.getElementById('wpm'),
+        modeButtons: document.querySelectorAll('input[name="mode"]'),
+        retryButton: document.getElementById('restart-btn')
+    };
 
-    // Clunky
-    function startTimer() {
-        startTime = Date.now();
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            timer.textContent = `Time Left: ${timeLeft}s`;
-            
-            if (timeLeft <= 0) {
-                endTest();
-            }
-        }, 1000);
-    }
+    // Test settings and state
+    const testSettings = {
+        duration: 60,
+        strictMode: false  // false = lazy mode, true = perfect mode
+    };
 
-    // Handles Clearing Text
-    function endTest() {
-        clearInterval(timerInterval);
-        typingArea.disabled = true;
-        submitBtn.disabled = false;
+    let testState = {
+        timeRemaining: testSettings.duration,
+        timerRunning: null,
+        testStartTime: null
+    };
+
+    // Core test functions
+    function resetTest() {
+        // Reset our timer state
+        testState.timeRemaining = testSettings.duration;
+        testState.timerRunning = null;
+        testState.testStartTime = null;
         
-        userTextInput.value = typingArea.value;
-        timeTakenInput.value = Math.round(Date.now() - startTime).toFixed(3) / 1000;
+        // Reset what the user sees
+        elements.timer.textContent = `Time Left: ${testSettings.duration}s`;
+        elements.accuracyCounter.textContent = 'Accuracy: 100%';
+        elements.speedCounter.textContent = 'WPM: 0';
+        
+        // Clear and enable typing box
+        elements.typingBox.value = '';
+        elements.typingBox.disabled = false;
+        elements.typingBox.classList.remove('correct', 'error');
+        
+        // Hide retry button and focus typing box
+        elements.retryButton.style.display = 'none';
+        elements.typingBox.focus();
     }
 
-    // Typing Listener to Start Timer
-    typingArea.addEventListener('input', (e) => {
-        if (!timerInterval) {
-            startTimer();
+    function beginTimer() {
+        if (!testState.timerRunning) {
+            testState.testStartTime = Date.now();
+            testState.timerRunning = setInterval(() => {
+                testState.timeRemaining--;
+                elements.timer.textContent = `Time Left: ${testState.timeRemaining}s`;
+                
+                if (testState.timeRemaining <= 0) {
+                    finishTest('Time up!');
+                }
+                updateTestStats();
+            }, 1000);
         }
+    }
 
-        const typed = e.target.value;
+    function updateTestStats() {
+        const typedText = elements.typingBox.value;
+        
+        // Speed calculation
+        const wordCount = typedText.trim().split(/\s+/).length;
+        const minutesElapsed = (Date.now() - testState.testStartTime) / 60000;
+        const currentSpeed = Math.round(wordCount / minutesElapsed);
+        elements.speedCounter.textContent = `WPM: ${currentSpeed}`;
 
-        //Handling wrong text input, goes red when wrong text
-        //Finishing Condition should be editable, perhaps strict vs. lazy mode?
-        if (typed === referenceText.substring(0, typed.length)) {
-            typingArea.classList.remove('error');
-            typingArea.classList.add('correct');
+        // Accuracy calculation
+        let correctChars = 0;
+        for (let i = 0; i < typedText.length; i++) {
+            if (typedText[i] === elements.targetText[i]) correctChars++;
+        }
+        
+        const accuracy = typedText.length > 0 
+            ? Math.round((correctChars / typedText.length) * 100) 
+            : 100;
+            
+        elements.accuracyCounter.textContent = `Accuracy: ${accuracy}%`;
+    }
+
+    function finishTest(message) {
+        clearInterval(testState.timerRunning);
+        elements.typingBox.disabled = true;
+        updateTestStats();
+        elements.retryButton.style.display = 'block';
+    }
+
+    function checkTyping(typedText) {
+        // Visual feedback
+        if (typedText === elements.targetText.substring(0, typedText.length)) {
+            elements.typingBox.classList.remove('error');
+            elements.typingBox.classList.add('correct');
         } else {
-            typingArea.classList.remove('correct');
-            typingArea.classList.add('error');
+            elements.typingBox.classList.remove('correct');
+            elements.typingBox.classList.add('error');
         }
 
-        if (typed === referenceText) {
-            endTest();
+        // Check if test is complete
+        if (typedText.length >= elements.targetText.length) {
+            const isLazyMode = !testSettings.strictMode;
+            const isPerfectMatch = typedText === elements.targetText;
+            
+            if (isLazyMode || isPerfectMatch) {
+                finishTest('Test complete!');
+            }
         }
+    }
+
+    // Event listeners
+    elements.modeButtons.forEach(button => {
+        button.addEventListener('change', (e) => {
+            testSettings.strictMode = e.target.value === 'perfect';
+            checkTyping(elements.typingBox.value);
+        });
     });
+
+    elements.typingBox.addEventListener('input', (e) => {
+        if (!testState.timerRunning) beginTimer();
+        checkTyping(e.target.value);
+        updateTestStats();
+    });
+
+    // Prevent cheating
+    elements.typingBox.addEventListener('paste', e => e.preventDefault());
+    elements.typingBox.addEventListener('drop', e => e.preventDefault());
+
+    // Retry handler
+    elements.retryButton.addEventListener('click', resetTest);
+
+    // Start first test
+    resetTest();
 });
