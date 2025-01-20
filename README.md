@@ -22,10 +22,12 @@ Backend
     venv\Scripts\activate
 
 1. Install Dependencies
-   pip install -r requirements.txt
 
-2. Run app.py
-   python app.py
+pip install -r requirements.txt
 
-3. Open Browser and go to http://127.0.0.1:5000
+3. Run app.py
+
+python app.py
+
+4. Open Browser and go to http://127.0.0.1:5000
 
