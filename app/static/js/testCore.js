@@ -18,7 +18,8 @@ export class TypingTest {
 
         // Not Very familiar with binding as a practice. If it works it works.
         this.resetTest = this.resetTest.bind(this);
-        this.beginTimer = this.beginTimer.bind(this);
+        this.beginTimer = this.beginTimer
+        .bind(this);
         this.checkTyping = this.checkTyping.bind(this);
         this.updateTestStats = this.updateTestStats.bind(this);
         this.finishTest = this.finishTest.bind(this);
@@ -160,8 +161,6 @@ export class TypingTest {
         // 2. Show the modal by adding the 'show' class
         modal.classList.add('show');
     
-        // (We've removed any lines like `modal.style.display = 'flex';`)
-    
         console.log(message || 'Test finished.');
         return stats;
     }
@@ -180,7 +179,6 @@ export class TypingTest {
                 mistakenWords.push(typedWords[i]); // Add incorrect word
             }
         }
-
         this.state.mistakenWords = mistakenWords; // Store mistaken words
 
         // Validate typed text for styling

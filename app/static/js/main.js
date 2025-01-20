@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     retryButton: getRequiredElement('restart-btn')
   };
 
-  // Worst implementation of all time. If you see this dont hire me.
+  // Worst implementation ever
   const historyManager = new HistoryManager('run-history');
   const typingTest = new TypingTest(elements);
 
@@ -41,13 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Override finishTest to save run data
   const originalFinishTest = typingTest.finishTest.bind(typingTest);
 
-  // Weird fucked up method I have to use or else it all breaks fuck my fucked up life.
+  // Weird method I have to use for now or else it all breaks.
   closeBtn.addEventListener('click', () => {
     historyModal.classList.remove('show');
   });
 
   const clearButton = document.getElementById('clear-btn');
   clearButton.addEventListener('click', async () => {
+    // This doesn't really need to be a thing. Oh well.
       try {
           if (confirm('Are you sure you want to clear all history?')) {
               const historyManager = new HistoryManager('run-history');

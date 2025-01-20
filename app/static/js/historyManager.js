@@ -102,7 +102,8 @@ export class HistoryManager {
         }
     }
 
-    // Markup Helpers, Since I'm Lazy
+    // Markup Helpers, probably need to be able to handle this data differently
+    // Don't think it's good practice to be handling these elements here directly.
 
     renderHistory(history) {
         const historyMarkup = history
