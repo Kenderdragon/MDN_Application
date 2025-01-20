@@ -16,10 +16,10 @@ Backend
 
 * Requirements *
  - Python 3.8+
- - pip
  - Reccomended - Setup Virtual Environment
-    python -m venv venv
-    venv\Scripts\activate
+
+python -m venv venv
+venv\Scripts\activate
 
 1. Install Dependencies
 
