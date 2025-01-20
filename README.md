@@ -14,7 +14,7 @@ Backend
 
 ## Local Setup Guide
 
-** Requirements **
+* Requirements *
  - Python 3.8+
  - pip
  - Reccomended - Setup Virtual Environment
