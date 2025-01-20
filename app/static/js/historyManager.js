@@ -178,14 +178,8 @@ export class HistoryManager {
         // Show the modal
         modal.classList.add('show');
       
-        // Attach your close event ONCE. If you worry about duplicates, define it once outside.
         const closeBtn = modal.querySelector('.close-btn');
         if (closeBtn) {
-          // Remove ANY old or anonymous arrow listeners if you want to be safe:
-          // closeBtn.replaceWith(closeBtn.cloneNode(true)); 
-          // closeBtn = modal.querySelector('.close-btn');
-          
-          // Now attach a single arrow function
           closeBtn.addEventListener('click', () => {
             modal.classList.remove('show');
           }, { once: true }); 
