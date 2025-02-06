@@ -1,4 +1,5 @@
-Work in Progress Typing Test and Analyzer
+One day hackathon-style project for MDN intake. 
+May be extended/rewritten in the future.
 
 Currently has customizable accuracy criteria, dynamic response to incorrect typing, local side storage, and the ability to view past run's statistics and mistaken words.
 
